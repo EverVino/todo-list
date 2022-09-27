@@ -1,0 +1,41 @@
+html {
+    box-sizing: border-box;
+    height: 100%;
+}
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+body{
+    margin:0;
+    height: 100%;
+}
+
+header {
+    text-align: center;
+    font-size: 70px;
+    background-color: yellow;
+    height: 12%;
+}
+main {
+    display:grid;
+    grid-template-columns: 3fr 7fr;
+    height: 76%;
+    
+}
+nav.right-nav{
+    background-color: yellowgreen;
+}
+.container {
+    background-color: whitesmoke;
+}
+
+footer{
+    text-align: center;
+    background-color: tomato;
+    height: 12%;
+}
+p {
+    color:red;
+    font-size : 20px;
+}
