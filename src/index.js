@@ -1,4 +1,6 @@
 import "./style.css";
+
+
 const nombre = document.createElement("p");
 nombre.textContent = "John Ever Vino Duran";
 
