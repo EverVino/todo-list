@@ -29,13 +29,37 @@ export default function createForm(container){
     activityList.cols = "20";
 
     let priorityContainer = document.createElement("div");
-    let highPriority = document.createElement("input")
+    
+    let titlePriority = document.createElement("p");
+    titlePriority.textContent="Priority"
+    priorityContainer.appendChild(titlePriority);
+
+    let highPriority = document.createElement("input");
     highPriority.type="radio"
     highPriority.name = "priority";
+
     let labelhP = document.createElement("label");
-    labelhP.appendChild(document.createTextNode("High"));
     labelhP.appendChild(highPriority);
+    labelhP.appendChild(document.createTextNode("High"));
     priorityContainer.appendChild(labelhP);
+
+    let mediumPriority = document.createElement("input")
+    mediumPriority.type="radio"
+    mediumPriority.name = "priority";
+
+    let labelmP = document.createElement("label");
+    labelmP.appendChild(mediumPriority);
+    labelmP.appendChild(document.createTextNode("Medium"));
+    priorityContainer.appendChild(labelmP);
+    
+    let lowPriority = document.createElement("input")
+    lowPriority.type="radio"
+    lowPriority.name = "priority";
+
+    let labellP = document.createElement("label");
+    labellP.appendChild(lowPriority);
+    labellP.appendChild(document.createTextNode("Low"));
+    priorityContainer.appendChild(labellP);
 
     let acceptButton = document.createElement("button");
     acceptButton.textContent = "Guardar";

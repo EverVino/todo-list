@@ -63,6 +63,13 @@ a {
     font-size: large;
     font-weight: bold;
 }
+
+.project {
+    color:#845EC2;
+    font-size: large;
+    font-weight: bold;
+    display: flex;
+}
 .container {
     background-color: var(--bg-light);
     /* width: 65rem; */
