@@ -11,10 +11,10 @@ export default function loadTodoList(todoList) {
     createPlusProject(menu);
 
     for(const task of todoList.projects[0].tasks){
-        createCard(task, container);
+        createCard(todoList.projects[0],task, container);
     }
 
-    createPlus(container);
+    createPlus(todoList.projects[0], todoList.projects[0].tasks.length, container);
 
 
 }

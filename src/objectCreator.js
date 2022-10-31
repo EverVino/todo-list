@@ -1,6 +1,6 @@
 const todoListFactory = () => {
     let projects = [];
-    const add = (project)=> {
+    let add = (project)=> {
         projects.push(project);
     }
     return {projects, add}

@@ -4,10 +4,13 @@ import IconEdit from "./edit.png";
 import IconPlus from "./plus.png";
 import IconOk from "./ok.png";
 import IconCancel from "./cancel.png";
-
+import { todoList } from "./index";
+import {todoListFactory, projectFactory, taskFactory} from "./objectCreator";
+import loadTodoList from "./loadTodoListDOM";
+import loadProject from "./loadProject";
 import "./style.css";
 
-function createCard(task, container) {
+function createCard(project, task, container) {
     const card = document.createElement("div");
     card.classList.add("card");
 
@@ -61,11 +64,31 @@ function createCard(task, container) {
 
     let priority = document.createElement("p");
     priority.textContent = task.priority;
-    card.dataset.index = task.index
+    card.dataset.index = task.index;
+    
+    card.dataset.indexProject = project.index;
     card.append(priority);
+    
 }
 
-function createForm(container){
+function cancelForm(project, n, container){
+    container.removeChild(container.lastChild);
+    createPlus(project, n, container);
+}
+
+function okForm(indexP){
+    const title = document.querySelector(".titleText").value;
+    const dueDate = document.querySelector(".dueDateText").value;
+    const activityList = document.querySelector(".activityListText").value;
+    const priority = document.querySelector("input[name='priority']:checked").value;
+    
+    let newTask = taskFactory(title,dueDate,activityList,priority);
+    
+    todoList.projects[indexP].tasks.push(newTask);
+    
+    loadProject(todoList, indexP);
+}
+function createForm(project, n, container){
     const card = document.createElement("div");
     card.classList.add("card");
     
@@ -75,17 +98,19 @@ function createForm(container){
     message.textContent = "Nueva Tarea";
 
     let title = document.createElement("input");
+    title.classList.add("titleText");
     title.type="text";
     title.name="title";
-    title.placeholder="Aquí va el título";
+    title.placeholder="New Task Title";
 
     let dueDate = document.createElement("input");
+    dueDate.classList.add("dueDateText");
     dueDate.type = "text";
     dueDate.name = "dueDate";
     dueDate.placeholder = "Ponga la fecha límite";
 
     let activityList = document.createElement("textarea");
-    activityList.name = "activityList";
+    activityList.classList.add("activityListText");
     activityList.placeholder = "Separe las actividades en líneas"
     activityList.rows = "10";
     activityList.cols = "20";
@@ -99,6 +124,7 @@ function createForm(container){
     let highPriority = document.createElement("input");
     highPriority.type="radio"
     highPriority.name = "priority";
+    highPriority.value = "high";
 
     let labelhP = document.createElement("label");
     labelhP.appendChild(highPriority);
@@ -108,6 +134,7 @@ function createForm(container){
     let mediumPriority = document.createElement("input")
     mediumPriority.type="radio"
     mediumPriority.name = "priority";
+    mediumPriority.value = "medium";
 
     let labelmP = document.createElement("label");
     labelmP.appendChild(mediumPriority);
@@ -117,6 +144,7 @@ function createForm(container){
     let lowPriority = document.createElement("input")
     lowPriority.type="radio"
     lowPriority.name = "priority";
+    lowPriority.value = "low";
 
     let labellP = document.createElement("label");
     labellP.appendChild(lowPriority);
@@ -128,11 +156,20 @@ function createForm(container){
     let iconOk = new Image();
     iconOk.src = IconOk;
 
+    iconOk.addEventListener("click", (n, container) => {
+        okForm(project.index, container);
+    });
+
     let iconCancel = new Image();
     iconCancel.src = IconCancel;
+    iconCancel.addEventListener("click", ()=> {
+        cancelForm(project, n, container);
+    });
 
     buttons.appendChild(iconOk);
     buttons.appendChild(iconCancel);
+    card.dataset.indexProject = project.index;
+    card.dataset.index = n;
 
     card.appendChild(message);
     card.appendChild(title);
@@ -150,7 +187,7 @@ function createFormProject(container) {
     let title = document.createElement("input")
     title.type="text";
     title.name="title";
-    title.placeholder="Nwe Project";
+    title.placeholder="New Project";
 
     let button = document.createElement("button");
     button.textContent = "Crear"
@@ -160,20 +197,22 @@ function createFormProject(container) {
 
     container.appendChild(project);
 }
-function enableForm(container){
+
+function enableForm(project, n, container){
     container.removeChild(container.lastChild);
-    createForm(container);
+    createForm(project, n, container);
 }
-function createPlus(container){
+
+function createPlus(project, n, container){
     const card = document.createElement("div");
     card.classList.add("card");
     let iconPlus = new Image();
     iconPlus.src = IconPlus;
     iconPlus.addEventListener("click", () => {
-        enableForm(container);
+        enableForm(project, n, container);
     })
     card.appendChild(iconPlus);
-    console.log(container);
+    
     container.appendChild(card);
 }
 

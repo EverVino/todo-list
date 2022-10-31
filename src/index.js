@@ -1,10 +1,4 @@
 import "./style.css";
-// import createCard from "./createCard";
-// import createForm from "./createForm";
-// import createPlus from "./createplus";
-// import createPlusProject from "./createPlusProject";
-// import createFormProject from "./createFormProject";
-// import createProject from "./createProject";
 import {createCard, createForm, createFormProject,createPlus, createPlusProject, createProject} from "./creatorDOM";
 import {todoListFactory, projectFactory, taskFactory} from "./objectCreator";
 import loadTodoList from "./loadTodoListDOM";
@@ -16,7 +10,8 @@ let initialProject = projectFactory("For TODAY");
 
 todoList.add(initialProject);
 
-initialProject.index = todoList.projects.lenght-1;
+initialProject.index = todoList.projects.length-1;
+
 
 const task1 = taskFactory(
     "Poner en marcha la caldera",
@@ -33,24 +28,11 @@ initialProject.tasks.push(task2);
 
 loadTodoList(todoList);
 
+export {todoList};
 
 
-
-// let contenedor = document.querySelector(".container")
-
-// createCard("Nueva Tarea", contenedor);
-
-// createForm(contenedor);
-
-// createPlus(contenedor);
-
-// let menu = document.querySelector(".right-nav");
-
-// createProject("Nuevo Proyecto", menu)
-
-// createFormProject(menu);
-
-// createPlusProject(menu);
+// change loader container 
+// use loader container instead of loader todoList
 
 
 
