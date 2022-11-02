@@ -10,9 +10,6 @@ let initialProject = projectFactory("For TODAY");
 
 todoList.add(initialProject);
 
-initialProject.index = todoList.projects.length-1;
-
-
 const task1 = taskFactory(
     "Poner en marcha la caldera",
     "2022-08-04",
@@ -23,8 +20,8 @@ const task2 = taskFactory(
     "2022-08-11",
     "Abri1r\nCerrar2\nllenar3\nejemplo2","low");
 
-initialProject.tasks.push(task1);
-initialProject.tasks.push(task2);
+initialProject.add(task1);
+initialProject.add(task2);
 
 loadTodoList(todoList);
 

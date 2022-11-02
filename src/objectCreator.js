@@ -1,6 +1,7 @@
 const todoListFactory = () => {
     let projects = [];
     let add = (project)=> {
+        project.index = projects.length;
         projects.push(project);
     }
     return {projects, add}
@@ -9,7 +10,11 @@ const todoListFactory = () => {
 const projectFactory = (title) => {
     let tasks = [];
     let index = 0;
-    return {title, tasks, index}
+    let add = (task)=> {
+        task.index = tasks.length;
+        tasks.push(task);
+    }
+    return {title, tasks, index, add}
 }
 
 const taskFactory = (title, dueDate, textArea, priority) => {

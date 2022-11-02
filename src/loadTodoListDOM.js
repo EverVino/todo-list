@@ -3,6 +3,13 @@ import {createCard, createForm, createFormProject,createPlus, createPlusProject,
 export default function loadTodoList(todoList) {
     let menu = document.querySelector(".right-nav");
     let container = document.querySelector(".container");
+    while(container.firstChild){
+        container.removeChild(container.lastChild);
+    }
+
+    while(menu.firstChild){
+        menu.removeChild(menu.lastChild);
+    }
     
     for(const project of todoList.projects){
         createProject(project, menu);

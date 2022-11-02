@@ -10,6 +10,117 @@ import loadTodoList from "./loadTodoListDOM";
 import loadProject from "./loadProject";
 import "./style.css";
 
+function editCard(card){
+    const index = card.dataset.index;
+    const indexP = card.dataset.indexProject;
+    const task = todoList.projects[indexP].tasks[index];
+
+    while(card.firstChild){
+        card.removeChild(card.lastChild)
+    }
+
+    let message = document.createElement("p");
+    message.classList.add("title-card");
+    message.textContent = "Edit task";
+
+    let title = document.createElement("input");
+    title.classList.add("titleText");
+    title.type="text";
+    title.name="title";
+    title.value = task.title;
+
+    let dueDate = document.createElement("input");
+    dueDate.classList.add("dueDateText");
+    dueDate.type = "text";
+    dueDate.name = "dueDate";
+    dueDate.value = task.dueDate;
+
+    let activityList = document.createElement("textarea");
+    activityList.classList.add("activityListText");
+    activityList.value = task.activities.join("\n");
+    activityList.rows = "10";
+    activityList.cols = "20";
+
+    let priorityContainer = document.createElement("div");
+    
+    let titlePriority = document.createElement("p");
+    titlePriority.textContent="Priority"
+    priorityContainer.appendChild(titlePriority);
+
+    let highPriority = document.createElement("input");
+    highPriority.type="radio"
+    highPriority.name = "priority";
+    highPriority.value = "high";
+
+    let labelhP = document.createElement("label");
+    labelhP.appendChild(highPriority);
+    labelhP.appendChild(document.createTextNode("High"));
+    priorityContainer.appendChild(labelhP);
+
+    let mediumPriority = document.createElement("input")
+    mediumPriority.type="radio"
+    mediumPriority.name = "priority";
+    mediumPriority.value = "medium";
+
+    let labelmP = document.createElement("label");
+    labelmP.appendChild(mediumPriority);
+    labelmP.appendChild(document.createTextNode("Medium"));
+    priorityContainer.appendChild(labelmP);
+    
+    let lowPriority = document.createElement("input")
+    lowPriority.type="radio"
+    lowPriority.name = "priority";
+    lowPriority.value = "low";
+
+    let labellP = document.createElement("label");
+    labellP.appendChild(lowPriority);
+    labellP.appendChild(document.createTextNode("Low"));
+    priorityContainer.appendChild(labellP);
+
+    if (task.priority == "high"){
+        highPriority.checked=true;
+    }
+    if (task.priority == "medium"){
+        mediumPriority.checked=true;
+    }
+    if (task.priority == "low"){
+        lowPriority.checked=true;
+    }
+    const buttons = document.createElement("div")
+    
+    let iconOk = new Image();
+    iconOk.src = IconOk;
+
+    iconOk.addEventListener("click", () => {
+        const title = document.querySelector(".titleText").value;
+        const dueDate = document.querySelector(".dueDateText").value;
+        const activityList = document.querySelector(".activityListText").value;
+        const priority = document.querySelector("input[name='priority']:checked").value;
+        
+        let newTask = taskFactory(title,dueDate,activityList,priority);
+        
+        todoList.projects[indexP].tasks[index]=newTask;
+        
+        loadProject(todoList, indexP);
+    });
+
+    let iconCancel = new Image();
+    iconCancel.src = IconCancel;
+    iconCancel.addEventListener("click", ()=> {
+        loadProject(todoList, indexP);
+    });
+
+    buttons.appendChild(iconOk);
+    buttons.appendChild(iconCancel);
+    
+    card.appendChild(message);
+    card.appendChild(title);
+    card.appendChild(dueDate);
+    card.appendChild(activityList);
+    card.appendChild(priorityContainer);
+    card.appendChild(buttons);
+
+}
 function createCard(project, task, container) {
     const card = document.createElement("div");
     card.classList.add("card");
@@ -29,10 +140,21 @@ function createCard(project, task, container) {
 
     let iconEdit = new Image();
     iconEdit.src = IconEdit;
+    iconEdit.addEventListener("click", (e) => {
+        editCard(e.target.parentNode.parentNode)
+        console.log("editar");       
+    })
+
     header.appendChild(iconEdit);
 
     let iconRemove = new Image();
     iconRemove.src = IconRemove;
+    iconRemove.addEventListener("click", (e) => {
+        let index = e.target.parentNode.parentNode.dataset.index;
+        let indexP = e.target.parentNode.parentNode.dataset.indexProject;
+        todoList.projects[indexP].tasks.splice(index,1)
+        loadProject(todoList,indexP);
+    })
     header.appendChild(iconRemove);
 
     let dueDate = document.createElement("p");
@@ -84,7 +206,7 @@ function okForm(indexP){
     
     let newTask = taskFactory(title,dueDate,activityList,priority);
     
-    todoList.projects[indexP].tasks.push(newTask);
+    todoList.projects[indexP].add(newTask);
     
     loadProject(todoList, indexP);
 }
@@ -148,7 +270,7 @@ function createForm(project, n, container){
 
     let labellP = document.createElement("label");
     labellP.appendChild(lowPriority);
-    labellP.appendChild(document.createTextNode("Low"));
+    labellP.appendChild(document.createTextNode("Low")); 
     priorityContainer.appendChild(labellP);
 
     const buttons = document.createElement("div")
@@ -181,19 +303,52 @@ function createForm(project, n, container){
 
 }
 
+function okProjectform(n, title, container){
+    let project = projectFactory(title);
+    
+    todoList.add(project);
+    
+    loadProject(todoList,n);
+    container.removeChild(container.lastChild);
+    
+    createProject(todoList.projects[n], container);
+    createPlusProject(container);
+}
+
 function createFormProject(container) {
     let project = document.createElement("div");
 
-    let title = document.createElement("input")
+    let title = document.createElement("input");
     title.type="text";
     title.name="title";
     title.placeholder="New Project";
 
-    let button = document.createElement("button");
-    button.textContent = "Crear"
+    let buttons = document.createElement("div");
 
+    let iconOk = new Image();
+    iconOk.src = IconOk;
+
+    iconOk.addEventListener("click", () => {
+        
+        let n = todoList.projects.length;
+        okProjectform(n, title.value, container);
+    });
+
+    let iconCancel = new Image();
+    iconCancel.src = IconCancel;
+    iconCancel.addEventListener("click", ()=> {
+        
+        container.removeChild(container.lastChild);
+        createPlusProject(container);
+    });
+
+    buttons.appendChild(iconOk);
+    buttons.appendChild(iconCancel);
+    
+    
     project.appendChild(title);
-    project.appendChild(button);
+    project.appendChild(buttons);
+    
 
     container.appendChild(project);
 }
@@ -216,33 +371,137 @@ function createPlus(project, n, container){
     container.appendChild(card);
 }
 
+function enableProject(container) {
+    container.removeChild(container.lastChild);
+    createFormProject(container);
+}
+
 function createPlusProject(container){
     const project = document.createElement("div");
     
     let iconPlus = new Image();
     iconPlus.src = IconPlus;
 
+    iconPlus.addEventListener("click", (project) => {
+        enableProject(container);
+    });
+
     project.appendChild(iconPlus);
-    
     container.appendChild(project);
 }
 
+function createEditProject(index, project, title){
+    todoList.projects[index].title = title;
+
+    while(project.firstChild){
+        project.removeChild(project.lastChild);
+    }
+    project.classList.add("project");
+    let titleP = document.createElement("p");
+    titleP.textContent = title;
+
+    titleP.addEventListener("click", (e) => {
+        const indexP = e.target.parentNode.dataset.indexProject;
+        loadProject(todoList, indexP);
+        
+    });
+    
+    let iconEdit = new Image();
+    iconEdit.src = IconEdit;
+    iconEdit.addEventListener("click", (e) => {
+        editProjectForm(e.target.parentNode.parentNode);
+        console.log("Editar Project");
+    });
+
+    let iconRemove = new Image();
+    iconRemove.src = IconRemove;
+    iconRemove.addEventListener("click", (e) => {
+        let n = e.target.parentNode.parentNode.dataset.indexProject;
+        todoList.projects.splice(n,1);
+        loadTodoList(todoList);
+    });
+
+    let buttons = document.createElement("div");
+    buttons.appendChild(iconEdit);
+    buttons.appendChild(iconRemove);
+
+    project.appendChild(titleP);
+    project.appendChild(buttons);
+}
+
+function editProjectForm(projectDOM){
+    const index = projectDOM.dataset.indexProject;
+    projectDOM.classList.remove("project");
+    while(projectDOM.firstChild){
+        projectDOM.removeChild(projectDOM.lastChild);
+    }
+    
+    let title = document.createElement("input");
+    title.type="text";
+    title.name="title";
+    title.value = todoList.projects[index].title;
+    let buttons = document.createElement("div");
+
+    let iconOk = new Image();
+    iconOk.src = IconOk;
+    
+    iconOk.addEventListener("click", (e) => {
+        let projectDOM = e.target.parentNode.parentNode;
+        createEditProject(index, projectDOM, title.value);
+    });
+
+    let iconCancel = new Image();
+    iconCancel.src = IconCancel;
+    iconCancel.addEventListener("click", (e)=> {
+        let projectDOM = e.target.parentNode.parentNode;
+        let oldTitle = todoList.projects[index].title;
+        createEditProject(index, projectDOM, oldTitle);
+    });
+
+    buttons.appendChild(iconOk);
+    buttons.appendChild(iconCancel);
+
+    projectDOM.appendChild(title);
+    projectDOM.appendChild(buttons);
+}
 function createProject(project, container){
     let projectName = document.createElement("div");
     projectName.classList.add("project");
     let titleP = document.createElement("p");
     titleP.textContent = project.title;
 
+    projectName.dataset.indexProject = project.index;
+
     let iconEdit = new Image();
     iconEdit.src = IconEdit;
+    iconEdit.addEventListener("click", (e) => {
+        editProjectForm(e.target.parentNode);
+        console.log("Editar Project");
+        // Modificar editar 
+    });
 
     let iconRemove = new Image();
     iconRemove.src = IconRemove;
-
+    iconRemove.addEventListener("click", (e) => {
+        let n = e.target.parentNode.dataset.indexProject;
+        
+        console.log("Remover Proyecto");
+        console.log(e.target.parentNode);
+        console.log(n);
+        todoList.projects.splice(n,1);
+        loadTodoList(todoList);
+    });
+    
+    console.log(projectName.dataset.indexProject);
     projectName.appendChild(titleP);
     projectName.appendChild(iconEdit);
     projectName.appendChild(iconRemove);
     container.appendChild(projectName);
+    titleP.addEventListener("click", (e) => {
+        const indexP = e.target.parentNode.dataset.indexProject;
+        loadProject(todoList, indexP);
+        
+    });
 }
 
 export {createCard, createForm, createFormProject, createPlus, createPlusProject, createProject};

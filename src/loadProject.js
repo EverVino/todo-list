@@ -2,7 +2,6 @@ import { createCard, createPlus } from "./creatorDOM";
 
 export default function loadProject(todoList, indexP){
     let container = document.querySelector(".container");
-    console.log(todoList);
     while (container.firstChild) {
         container.removeChild(container.lastChild);
     }
