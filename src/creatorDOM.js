@@ -5,7 +5,7 @@ import IconPlus from "./plus.png";
 import IconOk from "./ok.png";
 import IconCancel from "./cancel.png";
 import { todoList } from "./index";
-import {todoListFactory, projectFactory, taskFactory} from "./objectCreator";
+import {addTask, todoListFactory, projectFactory, taskFactory, addProject} from "./objectCreator";
 import loadTodoList from "./loadTodoListDOM";
 import loadProject from "./loadProject";
 import "./style.css";
@@ -100,6 +100,7 @@ function editCard(card){
         let newTask = taskFactory(title,dueDate,activityList,priority);
         
         todoList.projects[indexP].tasks[index]=newTask;
+        localStorage.setItem('todoList', JSON.stringify(todoList));
         
         loadProject(todoList, indexP);
     });
@@ -153,6 +154,7 @@ function createCard(project, task, container) {
         let index = e.target.parentNode.parentNode.dataset.index;
         let indexP = e.target.parentNode.parentNode.dataset.indexProject;
         todoList.projects[indexP].tasks.splice(index,1)
+        localStorage.setItem('todoList', JSON.stringify(todoList));
         loadProject(todoList,indexP);
     })
     header.appendChild(iconRemove);
@@ -206,8 +208,9 @@ function okForm(indexP){
     
     let newTask = taskFactory(title,dueDate,activityList,priority);
     
-    todoList.projects[indexP].add(newTask);
     
+    addTask(todoList, indexP, newTask);
+    localStorage.setItem('todoList', JSON.stringify(todoList));
     loadProject(todoList, indexP);
 }
 function createForm(project, n, container){
@@ -306,8 +309,9 @@ function createForm(project, n, container){
 function okProjectform(n, title, container){
     let project = projectFactory(title);
     
-    todoList.add(project);
     
+    addProject(todoList, project);
+    localStorage.setItem('todoList', JSON.stringify(todoList));
     loadProject(todoList,n);
     container.removeChild(container.lastChild);
     
@@ -418,6 +422,7 @@ function createEditProject(index, project, title){
     iconRemove.addEventListener("click", (e) => {
         let n = e.target.parentNode.parentNode.dataset.indexProject;
         todoList.projects.splice(n,1);
+        localStorage.setItem('todoList', JSON.stringify(todoList));
         loadTodoList(todoList);
     });
 
@@ -489,6 +494,7 @@ function createProject(project, container){
         console.log(e.target.parentNode);
         console.log(n);
         todoList.projects.splice(n,1);
+        localStorage.setItem('todoList', JSON.stringify(todoList));
         loadTodoList(todoList);
     });
     

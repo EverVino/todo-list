@@ -1,22 +1,32 @@
 const todoListFactory = () => {
     let projects = [];
-    let add = (project)=> {
-        project.index = projects.length;
-        projects.push(project);
-    }
-    return {projects, add}
+    // let add = (project)=> {
+    //     project.index = projects.length;
+    //     projects.push(project);
+    // }
+    return {projects}
 
+}
+function addProject(todoList, project){
+    const index = todoList.projects.length;
+    project.index=index;
+    todoList.projects.push(project);
 }
 const projectFactory = (title) => {
     let tasks = [];
     let index = 0;
-    let add = (task)=> {
-        task.index = tasks.length;
-        tasks.push(task);
-    }
-    return {title, tasks, index, add}
+    // let add = (task)=> {
+    //     task.index = tasks.length;
+    //     tasks.push(task);
+    // }
+    return {title, tasks, index}
 }
 
+function addTask(todoList, indexP, task){
+    const index = todoList.projects[indexP].tasks.length;
+    task.index = index;
+    todoList.projects[indexP].tasks.push(task);
+}
 const taskFactory = (title, dueDate, textArea, priority) => {
     let activities = textArea.split("\n");
     let index = 0;
@@ -49,4 +59,4 @@ const taskFactory = (title, dueDate, textArea, priority) => {
 //     console.log(act);
 // };
 
-export {todoListFactory, projectFactory, taskFactory}
+export {addTask, todoListFactory, projectFactory, taskFactory, addProject}
