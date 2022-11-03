@@ -100,13 +100,13 @@ a {
     /*grid-template-columns: repeat(auto-fit, minmax(130px,1fr));*/
     /*justify-content: center;*/
     /*align-items: baseline;*/
-    border: solid #D03B29 1px;
+    /*border: solid #D03B29 1px;*/
 }
 
 p {
     margin: 0;
     padding: 0.2rem;
-    border: solid #D03B29 1px;
+    /*border: solid #D03B29 1px;*/
 }
 
 .title-card {
@@ -142,7 +142,7 @@ button {
     padding: 20px;
     display: grid;
     grid-template-columns: 1fr 5fr;
-    border: solid 1px red ;
+    /*border: solid 1px red ;*/
 }
 
 footer{
