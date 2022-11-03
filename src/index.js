@@ -1,6 +1,6 @@
 import "./style.css";
 import {createCard, createForm, createFormProject,createPlus, createPlusProject, createProject} from "./creatorDOM";
-import {todoListFactory, projectFactory, taskFactory} from "./objectCreator";
+import {addProject, todoListFactory, projectFactory, taskFactory} from "./objectCreator";
 import loadTodoList from "./loadTodoListDOM";
 //Creating todo list
 let titulo = document.querySelector(".primary");
@@ -19,8 +19,8 @@ else {
 
     let initialProject = projectFactory("For TODAY");
 
-    todoList.add(initialProject);
-
+    addProject(todoList, initialProject);
+    
     localStorage.setItem('todoList', JSON.stringify(todoList));
     console.log("added to local Storage")
     console.log(JSON.parse(localStorage.getItem("todoList")));
